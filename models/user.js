@@ -1,32 +1,33 @@
 import mongoose from "mongoose";
 
-const schema = new mongoose.Schema({
-  name:{
+const UserSchema = new mongoose.Schema({
+  name: {
     type: String,
     required: true,
   },
-  email:{
+  email: {
     type: String,
     required: true,
     unique: true,
   },
-  password:{
+  password: {
     type: String,
     required: true,
   },
-  role:{
+  role: {
     type: String,
     default: "user",
   },
-  subscription:[
+  subscription: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "courses",
     },
-],
-resetPasswordExpire: Date,
-},{
+  ],
+  resetPasswordExpire: Date,
+}, {
   timestamps: true,
 });
 
-export const User = mongoose.model("User", schema);
+// Only create the model if it doesn't exist
+export const User = mongoose.models.User || mongoose.model("User", UserSchema);

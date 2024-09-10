@@ -1,8 +1,8 @@
 import { instance } from "../index.js";
-import TryCatch from "../middleware/tryCatch.js";
+import TryCatch from "../middleware/TryCatch.js";
 import { Courses } from "../models/Courses.js";
 import { Lecture } from "../models/Lecture.js";
-import { User } from "../models/User.js";
+import { User } from "../models/user.js";
 import crypto from "crypto";
 import { Payment } from "../models/Payment.js";
 
