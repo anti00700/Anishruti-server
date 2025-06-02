@@ -20,9 +20,20 @@ const app = express();
 app.use(express.json());
 
 // CORS setup
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://anishruti-frontend.vercel.app" // your deployed frontend
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with your frontend's origin
-  credentials: true, // If you need to pass cookies or other credentials
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 }));
 
 // Define port
