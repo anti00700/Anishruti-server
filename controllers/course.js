@@ -5,6 +5,7 @@ import { Lecture } from "../models/Lecture.js";
 import { User } from "../models/user.js";
 import crypto from "crypto";
 import { Payment } from "../models/Payment.js";
+import { Progress } from "../models/Progress.js";
 
 export const getAllCourses = TryCatch(async (req, res) => {
   const courses = await Courses.find();
@@ -108,6 +109,12 @@ export const paymentVerification = TryCatch(async (req, res) => {
     const course = await Courses.findById(req.params.id);
 
     user.subscription.push(course._id);
+
+    await Progress.create({
+      course: course._id,
+      completedLectures: [],
+      user: req.user._id,
+    });
     
     await user.save();
 
@@ -119,4 +126,49 @@ export const paymentVerification = TryCatch(async (req, res) => {
       message: "Payment Failed",
     });
   }
+});
+
+export const addProgress = TryCatch(async (req, res) => {
+  const progress = await Progress.findOne({
+    user: req.user._id,
+    course: req.query.course,
+  });
+
+  const { lectureId } = req.query;
+
+  if (progress.completedLectures.includes(lectureId)) {
+    return res.json({
+      message: "Progress recorded",
+    });
+  }
+
+  progress.completedLectures.push(lectureId);
+
+  await progress.save();
+
+  res.status(201).json({
+    message: "new Progress added",
+  });
+});
+
+export const getYourProgress = TryCatch(async (req, res) => {
+  const progress = await Progress.find({
+    user: req.user._id,
+    course: req.query.course,
+  });
+
+  if (!progress) return res.status(404).json({ message: "null" });
+
+  const allLectures = (await Lecture.find({ courses: req.query.course })).length;
+
+  const completedLectures = progress[0].completedLectures.length;
+
+  const courseProgressPercentage = (completedLectures * 100) / allLectures;
+
+  res.json({
+    courseProgressPercentage,
+    completedLectures,
+    allLectures,
+    progress,
+  });
 });
