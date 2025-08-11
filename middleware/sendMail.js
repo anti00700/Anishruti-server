@@ -79,72 +79,71 @@ export const sendForgotMail = async (subject, data) => {
 
   const html = `<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Your Password</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      background-color: #ffffff;
-      padding: 20px;
-      margin: 20px auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
-    }
-    h1 {
-      color: #5a2d82;
-    }
-    p {
-      color: #666666;
-    }
-    .button {
-      display: inline-block;
-      padding: 15px 25px;
-      margin: 20px 0;
-      background-color: #5a2d82;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    .footer {
-      margin-top: 20px;
-      color: #999999;
-      text-align: center;
-    }
-    .footer a {
-      color: #5a2d82;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Reset Your Password</h1>
-    <p>Hello,</p>
-    <p>You have requested to reset your password. Please click the button below to reset your password.</p>
-    <a href="${process.env.frontendurl}/reset-password/${data.token}" class="button">Reset Password</a>
-    <p>If you did not request this, please ignore this email.</p>
-    <div class="footer">
-      <p>Thank you,<br>Your Website Team</p>
-      <p><a href="https://yourwebsite.com">yourwebsite.com</a></p>
-    </div>
-  </div>
-</body>
-</html>
-`;
+  <body style="margin:0;padding:0;background-color:#f3f3f3;font-family:Arial,sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f3f3;padding:20px 0;">
+      <tr>
+        <td align="center">
+          <table cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+            <tr>
+              <td style="padding:20px;">
+                <h1 style="color:#5a2d82;margin-top:0;">Reset Your Password</h1>
+                <p style="color:#666666;font-size:16px;line-height:1.4;margin:0 0 15px;">
+                  Hello,
+                </p>
+                <p style="color:#666666;font-size:16px;line-height:1.4;margin:0 0 20px;">
+                  You have requested to reset your password. Please click the button below to reset it.
+                </p>
 
+                <!-- Button with full inline styles -->
+                <table cellspacing="0" cellpadding="0" style="margin:20px 0;">
+                  <tr>
+                    <td bgcolor="#5a2d82" style="border-radius:4px;">
+                      <a href="${process.env.frontendurl}/reset-password/${data.token}"
+                         style="display:inline-block;padding:15px 25px;font-size:16px;color:#ffffff;
+                                text-decoration:none;font-family:Arial,sans-serif;border-radius:4px;
+                                font-weight:bold;">
+                        Reset Password
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Fallback plain link -->
+                <p style="color:#999999;font-size:14px;line-height:1.4;margin:20px 0 0;">
+                  If the button above doesn’t work, copy and paste this link into your browser:<br>
+                  <a href="${process.env.frontendurl}/reset-password/${data.token}"
+                     style="color:#5a2d82;word-break:break-all;">
+                    ${process.env.frontendurl}/reset-password/${data.token}
+                  </a>
+                </p>
+
+                <p style="color:#666666;font-size:16px;line-height:1.4;margin:20px 0 0;">
+                  If you did not request this, please ignore this email.
+                </p>
+
+                <div style="text-align:center;margin-top:30px;color:#999999;font-size:12px;">
+                  <p>Thank you,<br>Your Website Team</p>
+                  <p>
+                    <a href="https://yourwebsite.com"
+                       style="color:#5a2d82;text-decoration:none;">
+                      yourwebsite.com
+                    </a>
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+  
   await transport.sendMail({
     from: process.env.Gmail,
     to: data.email,
     subject,
     html,
   });
+
 };
