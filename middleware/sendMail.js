@@ -138,12 +138,11 @@ export const sendForgotMail = async (subject, data) => {
     </table>
   </body>
 </html>`;
-  
+
   await transport.sendMail({
     from: process.env.Gmail,
     to: data.email,
     subject,
     html,
   });
-
 };
