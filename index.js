@@ -17,7 +17,7 @@ export const instance = new Razorpay({
 const app = express();
 
 // Use middlewares
-app.use(express.json());
+
 
 // CORS setup
 const allowedOrigins = [
@@ -36,6 +36,9 @@ app.use(cors({
   credentials: true,
 }));
 
+app.options("*", cors());
+
+app.use(express.json());
 // Define port
 const port = process.env.PORT || 4000;
 
